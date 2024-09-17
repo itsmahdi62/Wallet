@@ -35,4 +35,13 @@ public class Person {
     @NotEmpty(message = "Email cannot be empty")
     @Email(message = "Email should be valid")
     private String email;
+    // for logical delete
+    private boolean isDeleted;
+    /*
+    I learned when a hacker wants to attack me , I should place some wrong information
+    in my database and give him this wrong information to convince him it is enough for attacking ,you already have access to my db
+     */
+    private boolean isValid = true;
+
+
 }
