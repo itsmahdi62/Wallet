@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,10 +38,16 @@ public class PersonAPI {
         person.setPersonId(newperson.getPersonId());
         person.setName(newperson.getName());
         person.setFamily(newperson.getFamily());
+        person.setAge(newperson.getAge());
         person.setPhoneNumber(newperson.getPhoneNumber());
         person.setDateOfBirth(newperson.getDateOfBirth());
         person.setEmail(newperson.getEmail());
         person.setIsMail(newperson.getIsMail());
+        if(newperson.getIsMail() && newperson.getAge() >= 18){
+            if(newperson.getMilitaryServiceStatus() == null){
+                throw new IllegalArgumentException("Military service status must be provided for males 18 years or older.");
+            }
+        }
         return  personService.savePerson(person);
     }
 

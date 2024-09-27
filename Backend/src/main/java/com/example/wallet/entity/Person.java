@@ -34,6 +34,8 @@ public class Person {
     @NotEmpty(message = "Email cannot be empty")
     @Email(message = "Email should be valid")
     private String email;
+    @NotNull(message = "Age cannot be empty")
+    private int age;
     // for logical delete
     private boolean isDeleted;
     /*
