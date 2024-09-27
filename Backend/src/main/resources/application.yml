@@ -11,4 +11,4 @@ spring:
     generate-ddl: true
     database-platform: org.hibernate.dialect.OracleDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop

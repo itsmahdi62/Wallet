@@ -1,9 +1,8 @@
 package com.example.wallet.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
+
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Entity(name = "person")
@@ -20,7 +19,7 @@ public class Person {
     private Long id;
     @Column(name = "person_Id" , unique=true)
     @NotEmpty(message = "personId can not be empty !")
-    @Pattern(regexp = "^/d{10}$" ,  message = "Person national id must be 10 numbers !")
+    @Pattern(regexp = "^\\d{10}$" ,  message = "Person national id must be 10 numbers !")
     private String personId;
     private String name;
     private String family;
