@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity(name = "person")
 @Table(name = "person")
 @SequenceGenerator(sequenceName = "server1_orcl_seq", name = "ps", allocationSize = 1)
@@ -17,23 +19,32 @@ public class Person {
     @Id
     @GeneratedValue(generator = "ps")
     private Long id;
+
     @Column(name = "person_Id" , unique=true)
     @NotEmpty(message = "personId can not be empty !")
     @Pattern(regexp = "^\\d{10}$" ,  message = "Person national id must be 10 numbers !")
     private String personId;
+
     private String name;
+
     private String family;
+
     @Column(name = "phone_number" , unique=true)
     @NotEmpty(message = "personId can not be empty !")
     @Pattern(regexp = "^09\\d{9}$" , message = "Invalid input !")
     private String phoneNumber;
+
     private String dateOfBirth;
+
     private Boolean isMail;
+
     @Enumerated(EnumType.STRING)  // Persisting Enum as String
     private MilitaryServiceStatus militaryServiceStatus;
+
     @NotEmpty(message = "Email cannot be empty")
     @Email(message = "Email should be valid")
     private String email;
+
     @NotNull(message = "Age cannot be empty")
     private int age;
     // for logical delete
@@ -44,5 +55,9 @@ public class Person {
      */
     private boolean isValid = true;
 
-
+    // one to one reserves null (I guess for deleting user I would face problems )
+//    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
+    @OneToMany(cascade= CascadeType.ALL)
+    @JoinColumn(name = "FK")
+    private List<Account> account ;
 }
