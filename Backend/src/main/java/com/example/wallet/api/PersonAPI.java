@@ -2,12 +2,10 @@ package com.example.wallet.api;
 
 import com.example.wallet.entity.Person;
 import com.example.wallet.service.PersonService;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,10 +16,7 @@ import java.util.List;
 public class PersonAPI {
 
     private final PersonService personService;
-//    @GetMapping("/getAllUsers")
-//    public List<Person> findAll() {
-//        return personService.findAll();
-//    }
+
     @GetMapping("/getAllUsers")
     public ResponseEntity<List<Person>> findAll() {
         List<Person> personList = personService.findAll(); // Call to personService to fetch all users
@@ -32,7 +27,7 @@ public class PersonAPI {
     }
     @PostMapping("/signup")
     @ResponseBody
-    public Object save(@Valid @RequestBody Person newperson) {
+    public ResponseEntity<Person> save(@Valid @RequestBody Person newperson) {
        //  if we had user and admin roles in our entity this line of code would let anyone to be an admin
         Person person = new Person();
         person.setPersonId(newperson.getPersonId());
@@ -48,13 +43,22 @@ public class PersonAPI {
                 throw new IllegalArgumentException("Military service status must be provided for males 18 years or older.");
             }
         }
-        return  personService.savePerson(person);
+        person.setMilitaryServiceStatus(newperson.getMilitaryServiceStatus());
+        return   new ResponseEntity<>(personService.savePerson(person), HttpStatus.OK);
     }
 
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ResponseBody
-//    String handleConstraintViolationException(ConstraintViolationException e) {
-//        return "not valid due to validation error: " + e.getMessage();
-//    }
+    @PostMapping("/update-use-info/{id}")
+    @ResponseBody
+    public ResponseEntity<Person> updateUserInfo(@PathVariable Long id,@Valid @RequestBody Person person) {
+        Person updatedPerson = personService.updatePersonInfo(id, person);
+//        return ResponseEntity.ok(updatedPerson);
+        return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
+    }
+
+    @PostMapping("/delete-user/{id}")
+    @ResponseBody
+    public ResponseEntity<String> deleteUser(@PathVariable Long id ){
+        personService.deleteUser(id);
+        return new ResponseEntity<>("User deleted ! " , HttpStatus.OK);
+    }
 }

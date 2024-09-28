@@ -37,7 +37,7 @@ public class Person {
     @NotNull(message = "Age cannot be empty")
     private int age;
     // for logical delete
-    private boolean isDeleted;
+    private String deletedDate = null;
     /*
     I learned when a hacker wants to attack me , I should place some wrong information
     in my database and give him this wrong information to convince him it is enough for attacking ,you already have access to my db
