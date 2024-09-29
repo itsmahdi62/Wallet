@@ -28,7 +28,7 @@ public class PersonAPI {
     @PostMapping("/signup")
     @ResponseBody
     public ResponseEntity<Person> save(@Valid @RequestBody Person newperson) {
-       //  if we had user and admin roles in our entity this line of code would let anyone to be an admin
+       //  if we had user and admin roles in our entity this line of code would let anyone  be an admin
         Person person = new Person();
         person.setPersonId(newperson.getPersonId());
         person.setName(newperson.getName());
@@ -47,7 +47,7 @@ public class PersonAPI {
         return   new ResponseEntity<>(personService.savePerson(person), HttpStatus.OK);
     }
 
-    @PostMapping("/update-use-info/{id}")
+    @PostMapping("/update-user-info/{id}")
     @ResponseBody
     public ResponseEntity<Person> updateUserInfo(@PathVariable Long id,@Valid @RequestBody Person person) {
         Person updatedPerson = personService.updatePersonInfo(id, person);

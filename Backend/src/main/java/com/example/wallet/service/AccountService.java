@@ -50,7 +50,7 @@ public class AccountService {
         return accountRepository.save(updateAccount);
     }
 
-    public  void deleteAccount(Long id) {
+    public void deleteAccount(Long id) {
         Account deleteAccount = accountRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("User not found ! "));
         deleteAccount.setDeletedDate(String.valueOf(LocalDate.now()));
