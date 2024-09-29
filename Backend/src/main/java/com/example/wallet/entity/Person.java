@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity(name = "person")
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class Person {
+public class Person  implements Serializable {
     @Id
     @GeneratedValue(generator = "ps")
     private Long id;

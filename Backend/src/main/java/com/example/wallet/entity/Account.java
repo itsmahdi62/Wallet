@@ -6,17 +6,18 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 
-@Entity(name = "Account")
-@Table(name = "Account")
+@Entity(name = "account")
+@Table(name = "account")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class Account {
+public class Account implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
@@ -33,4 +34,6 @@ public class Account {
     @Pattern(regexp = "^IR\\d{24}$" ,  message = "Person national id must be 26 numbers !")
     private String shaba;
     private LocalDate CreationDate;
+
+    private String deletedDate = null;
 }

@@ -20,26 +20,17 @@ public class PersonService {
     // in spring boot best practice is to use inject by constructor instead of autowired
     private final PersonRepository personRepository;
 
+    // For creating Account
+    private final AccountService accountService ;
 
     public Person savePerson(Person person) {
         Person savedPerson = personRepository.save(person);
-        Account account = new Account();
-        // Creating default account for user with his id
-//        account.setAccountNumber( 1000000000 + savedPerson.getId());
-        String idString = String.valueOf(savedPerson.getId());
-        String zeros = "0".repeat(13 - idString.length());
-        String finalAccountNumber = zeros + idString;
-        account.setAccountNumber(finalAccountNumber);
 
-        // set shaba number
-        //account.setShaba("IR100000000000000000000000" +savedPerson.getId());
-        String shabaPrefix = "IR";
-        String paddedZeros = "0".repeat(24 - idString.length());
-        String shaba = shabaPrefix + paddedZeros + idString;
-        account.setShaba(shaba);
-        account.setCreationDate(LocalDate.now());
-        // initial value to wallet just for welcome
-        account.setAccountBalance(2000L);
+
+        // Refactor the code and send this part to Account service
+        // This line make a default account for each user
+        Account account = accountService.createAccount(savedPerson);
+
         List<Account> accounts = new ArrayList<>();
         accounts.add(account);
         savedPerson.setAccount(accounts);
@@ -59,7 +50,7 @@ public class PersonService {
 
     public  void deleteUser(Long id) {
         Person deletePerson = personRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("User not found ! "));
+                .orElseThrow(()-> new EntityNotFoundException("Account not found ! "));
         deletePerson.setDeletedDate(String.valueOf(LocalDate.now()));
         personRepository.save(deletePerson);
     }
