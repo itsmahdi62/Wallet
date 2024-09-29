@@ -1,5 +1,6 @@
 package com.example.wallet.service;
 
+import com.example.wallet.entity.Account;
 import com.example.wallet.entity.Person;
 import com.example.wallet.repository.PersonRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -19,9 +22,28 @@ public class PersonService {
 
 
     public Person savePerson(Person person) {
-        //  !person.getIsMail())
+        Person savedPerson = personRepository.save(person);
+        Account account = new Account();
+        // Creating default account for user with his id
+//        account.setAccountNumber( 1000000000 + savedPerson.getId());
+        String idString = String.valueOf(savedPerson.getId());
+        String zeros = "0".repeat(13 - idString.length());
+        String finalAccountNumber = zeros + idString;
+        account.setAccountNumber(finalAccountNumber);
 
-        return personRepository.save(person);
+        // set shaba number
+        //account.setShaba("IR100000000000000000000000" +savedPerson.getId());
+        String shabaPrefix = "IR";
+        String paddedZeros = "0".repeat(24 - idString.length());
+        String shaba = shabaPrefix + paddedZeros + idString;
+        account.setShaba(shaba);
+        account.setCreationDate(LocalDate.now());
+        // initial value to wallet just for welcome
+        account.setAccountBalance(2000L);
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(account);
+        savedPerson.setAccount(accounts);
+        return personRepository.save(savedPerson  );
     }
 
     public List<Person> findAll() {
