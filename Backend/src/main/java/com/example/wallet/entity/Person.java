@@ -24,7 +24,7 @@ public class Person  implements Serializable {
     @Column(name = "person_Id" , unique=true)
     @NotEmpty(message = "personId can not be empty !")
     @Pattern(regexp = "^\\d{10}$" ,  message = "Person national id must be 10 numbers !")
-    private String personId;
+    private String nationalId;
 
     private String name;
 
@@ -56,9 +56,8 @@ public class Person  implements Serializable {
      */
     private boolean isValid = true;
 
-    // one to one reserves null (I guess for deleting user I would face problems )
-//    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
-    @OneToMany(cascade= CascadeType.ALL)
-    @JoinColumn(name = "FK")
-    private List<Account> account ;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
 }

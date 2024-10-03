@@ -18,7 +18,6 @@ public class AccountService {
     public Account createAccount(Person savedPerson){
         // Creating default account for user with his id
         Account account = new Account();
-
         // Set account number
         // Account.setAccountNumber( 1000000000 + savedPerson.getId()); wrong way
         String idString = String.valueOf(savedPerson.getId());
@@ -38,11 +37,11 @@ public class AccountService {
         return account ;
     }
 
-    public List<Account> findAllAcounts(){
+    public List<Account> findAllAccounts(){
         return accountRepository.listOfExistingAccounts();
     }
 
-    public Account updateAccountInfo(Long id, Person person) {
+    public Account updateAccountInfo(Long id, Account account) {
         Account updateAccount = accountRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("User not found ! "));
 //        updateAccount.setEmail(person.getEmail());

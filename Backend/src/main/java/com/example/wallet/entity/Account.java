@@ -8,7 +8,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 @Entity(name = "account")
 @Table(name = "account")
@@ -21,6 +21,12 @@ public class Account implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
+
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
+    private Person person;
+
+    @OneToMany(mappedBy = "account")
+    private List<Transaction> accountTransactionList ;
 
     @Column(name="Account_Number" , unique = true)
     @NotEmpty(message = "Account Number can not be empty")

@@ -12,3 +12,5 @@ spring:
     database-platform: org.hibernate.dialect.OracleDialect
     hibernate:
       ddl-auto: create-drop
+  jwt:
+    secret: "09391395538Amir09391395538Amir!!"

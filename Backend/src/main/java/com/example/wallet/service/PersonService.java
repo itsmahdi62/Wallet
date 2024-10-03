@@ -25,16 +25,12 @@ public class PersonService {
 
     public Person savePerson(Person person) {
         Person savedPerson = personRepository.save(person);
-
-
         // Refactor the code and send this part to Account service
         // This line make a default account for each user
         Account account = accountService.createAccount(savedPerson);
+        savedPerson.setAccount(account);
 
-        List<Account> accounts = new ArrayList<>();
-        accounts.add(account);
-        savedPerson.setAccount(accounts);
-        return personRepository.save(savedPerson  );
+        return personRepository.save(savedPerson);
     }
 
     public List<Person> findAll() {
@@ -55,5 +51,11 @@ public class PersonService {
         personRepository.save(deletePerson);
     }
 
-
+    public Person findByNationalId(String nationalId) {
+        Person person = personRepository.findByNationalId(nationalId);
+        if (person == null) {
+            throw new RuntimeException("Person not found with nationalId: " + nationalId);
+        }
+        return person;
+    }
 }

@@ -11,4 +11,5 @@ public interface PersonRepository extends JpaRepository <Person , Long> {
     @Query("select o from person o where o.deletedDate is null")
     List<Person> listOfExistingPeople();
 
+    public Person findByNationalId(String nationalId);
 }

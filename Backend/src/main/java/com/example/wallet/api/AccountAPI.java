@@ -14,12 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/account/")
 @RequiredArgsConstructor
-public class AccountApi {
+public class AccountAPI {
     AccountService accountService ;
 
     @GetMapping("/getAllAccounts")
     public ResponseEntity<List<Account>> findAll() {
-        List<Account> accountList = accountService.findAllAcounts();
+        List<Account> accountList = accountService.findAllAccounts();
         if (accountList == null || accountList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Return 204 No Content if the list is empty
         }
@@ -34,10 +34,10 @@ public class AccountApi {
 
     @PostMapping("/update-account-info/{id}")
     @ResponseBody
-    public ResponseEntity<Person> updateAccountInfo(@PathVariable Long id,@Valid @RequestBody Account account) {
-        Person updatedPerson = accountService.updateAccountInfo(id, account);
+    public ResponseEntity<Account> updateAccountInfo(@PathVariable Long id,@Valid @RequestBody Account account) {
+        Account updatedAccount = accountService.updateAccountInfo(id, account);
 //        return ResponseEntity.ok(updatedPerson);
-        return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
+        return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
     }
 
     @PostMapping("/delete-account/{id}")

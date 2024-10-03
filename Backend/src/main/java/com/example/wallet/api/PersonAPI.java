@@ -1,9 +1,11 @@
 package com.example.wallet.api;
 
 import com.example.wallet.entity.Person;
+import com.example.wallet.security.JwtHelper;
 import com.example.wallet.service.PersonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +16,8 @@ import java.util.List;
 @RequestMapping("api/v1/person/")
 @RequiredArgsConstructor
 public class PersonAPI {
-
-    private final PersonService personService;
-
+    private final  PersonService personService;
+    private final JwtHelper jwtHelper ;
     @GetMapping("/getAllUsers")
     public ResponseEntity<List<Person>> findAll() {
         List<Person> personList = personService.findAll(); // Call to personService to fetch all users
@@ -30,7 +31,7 @@ public class PersonAPI {
     public ResponseEntity<Person> save(@Valid @RequestBody Person newperson) {
        //  if we had user and admin roles in our entity this line of code would let anyone  be an admin
         Person person = new Person();
-        person.setPersonId(newperson.getPersonId());
+        person.setNationalId(newperson.getNationalId());
         person.setName(newperson.getName());
         person.setFamily(newperson.getFamily());
         person.setAge(newperson.getAge());
@@ -44,7 +45,13 @@ public class PersonAPI {
             }
         }
         person.setMilitaryServiceStatus(newperson.getMilitaryServiceStatus());
-        return   new ResponseEntity<>(personService.savePerson(person), HttpStatus.OK);
+
+        Person savedPerson = personService.savePerson(person);
+        String token = jwtHelper.generateToken(savedPerson);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        return   new ResponseEntity<>(savedPerson , headers, HttpStatus.CREATED);
     }
 
     @PostMapping("/update-user-info/{id}")
