@@ -1,5 +1,7 @@
 package com.example.wallet.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -22,24 +24,28 @@ public class Account implements Serializable {
     @Id
     private Long id;
 
-    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
-    private Person person;
+//    @OneToOne(mappedBy = "account" , fetch = FetchType.LAZY)
+//     @JsonBackReference  // Handling the back reference
+//    private Person person;
 
-    @OneToMany(mappedBy = "account")
-    private List<Transaction> accountTransactionList ;
+//    @OneToMany(mappedBy = "account")
+//    private List<Transaction> accountTransactionList ;
 
-    @Column(name="Account_Number" , unique = true)
+    @Column(name="account_number" , unique = true)
     @NotEmpty(message = "Account Number can not be empty")
     @Pattern(regexp = "^\\d{13}$" ,  message = "Account number id must be 13 numbers !")
     private String accountNumber;
 
     @Min(1000)
-    @Column(name="Account_Balance")
+    @Column(name="account_balance")
     private Long accountBalance;
 
     @Pattern(regexp = "^IR\\d{24}$" ,  message = "Person national id must be 26 numbers !")
     private String shaba;
+
+    @Column(name = "creation_date")  // Explicit naming to avoid issues
     private LocalDate CreationDate;
 
+    @Column(name = "deleted_date", nullable = true)
     private String deletedDate = null;
 }

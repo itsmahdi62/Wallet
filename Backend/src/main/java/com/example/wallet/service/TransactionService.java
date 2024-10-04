@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,8 @@ public class TransactionService {
         Person person = personService.findByNationalId(nationalId);
 
         // بازیابی حساب کاربر
+//        List<Account> accountList = person.getAccountList();
+//        Account account = accountList.get(0);
         Account account = person.getAccount();
 
         // محاسبه موجودی بعد از تراکنش
@@ -43,7 +46,7 @@ public class TransactionService {
 
         // ایجاد تراکنش جدید
         Transaction transaction = new Transaction();
-        transaction.setAccount(account);
+//        transaction.setAccount(account);
         transaction.setDailyTransactionAmount(amount);
         transaction.setAccountBalanceAfterTransaction(accountBalanceAfterTransaction);
         transaction.setTime(LocalTime.now());

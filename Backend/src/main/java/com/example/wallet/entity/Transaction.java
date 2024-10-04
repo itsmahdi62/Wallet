@@ -20,14 +20,14 @@ public class Transaction implements Serializable {
     @Id
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", nullable = false)
-    private Account account;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "account_id", nullable = false)
+//    private Account account;
     // private LocalDateTime
     private LocalTime time ;
     private LocalDate date ;
 
-    @Column(name="Transaction_Amount")
+    @Column(name="transaction_amount")
     private Long transactionAmount;
     private Long accountBalanceAfterTransaction;
     private Long dailyTransactionAmount ;

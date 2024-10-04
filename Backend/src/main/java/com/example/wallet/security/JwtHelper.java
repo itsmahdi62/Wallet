@@ -16,8 +16,8 @@ import java.util.function.Function;
 
 @Component
 public class JwtHelper {
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60*60;
-    private String secret="Your secret key 09391395538";
+    public static final long JWT_TOKEN_VALIDITY = 1000 * 60*60;
+    private String secret="09391395538Amir!09391395538Amir!";
 
     // retrieve username
     public String getNationalIdFromToken(String token){
@@ -30,7 +30,7 @@ public class JwtHelper {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        Key hmacKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8) , "HacSHA256");
+        Key hmacKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8) , "HmacSHA256");
         return Jwts.parserBuilder()
                 .setSigningKey(hmacKey)
                 .build()
@@ -51,20 +51,20 @@ public class JwtHelper {
     private String generateToken(Map<String, Object> claims, String subject) {
         // Convert the secret string key into a Key object
         Key hmacKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
-                SignatureAlgorithm.HS512.getJcaName());
+                SignatureAlgorithm.HS256.getJcaName());
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-                .signWith(hmacKey, SignatureAlgorithm.HS512)
+                .signWith(hmacKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public Boolean validateToken(String token, Person person) {
         final String nationalId = getNationalIdFromToken(token);
-        return (person.equals(person.getNationalId()) && !isTokenExpired(token));
+        return (nationalId.equals(person.getNationalId()) && !isTokenExpired(token));
     }
 
     public Date getExpirationDateFromToken(String token) {

@@ -1,5 +1,6 @@
 package com.example.wallet.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.*;
@@ -21,8 +22,8 @@ public class Person  implements Serializable {
     @GeneratedValue(generator = "ps")
     private Long id;
 
-    @Column(name = "person_Id" , unique=true)
-    @NotEmpty(message = "personId can not be empty !")
+    @Column(name = "national_Id" , unique=true)
+    @NotEmpty(message = "nationalId can not be empty !")
     @Pattern(regexp = "^\\d{10}$" ,  message = "Person national id must be 10 numbers !")
     private String nationalId;
 
@@ -57,7 +58,8 @@ public class Person  implements Serializable {
     private boolean isValid = true;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL )
     @JoinColumn(name = "account_id", referencedColumnName = "id")
+//     @JsonManagedReference  // Managing the forward reference
     private Account account;
 }
