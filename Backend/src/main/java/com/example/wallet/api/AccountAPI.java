@@ -16,9 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountAPI {
     AccountService accountService ;
-
     @GetMapping("/getAllAccounts")
-    public ResponseEntity<List<Account>> findAll() {
+    public ResponseEntity<List<Account>> getAllAccounts() {
         List<Account> accountList = accountService.findAllAccounts();
         if (accountList == null || accountList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Return 204 No Content if the list is empty
@@ -27,14 +26,14 @@ public class AccountAPI {
     }
     @PostMapping("/createAccount")
     @ResponseBody
-    public ResponseEntity<Account> save(@Valid @RequestBody Person currentUser) {
+    public ResponseEntity<Account> createAccount(@Valid @RequestBody Person currentPerson) {
 
-        return  new ResponseEntity<>(accountService.createAccount(currentUser), HttpStatus.OK);
+        return  new ResponseEntity<>(accountService.createAccount(currentPerson), HttpStatus.OK);
     }
 
     @PostMapping("/update-account-info/{id}")
     @ResponseBody
-    public ResponseEntity<Account> updateAccountInfo(@PathVariable Long id,@Valid @RequestBody Account account) {
+    public ResponseEntity<Account> updateAccount(@PathVariable Long id,@Valid @RequestBody Account account) {
         Account updatedAccount = accountService.updateAccountInfo(id, account);
 //        return ResponseEntity.ok(updatedPerson);
         return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
@@ -42,7 +41,7 @@ public class AccountAPI {
 
     @PostMapping("/delete-account/{id}")
     @ResponseBody
-    public ResponseEntity<String> deleteUser(@PathVariable Long id ){
+    public ResponseEntity<String> deleteAccount(@PathVariable Long id ){
         accountService.deleteAccount(id);
         return new ResponseEntity<>("Account deleted ! " , HttpStatus.OK);
     }

@@ -1,7 +1,6 @@
-package com.example.wallet.repository;
+package com.example.wallet.security.repository;
 
 import com.example.wallet.entity.Account;
-import com.example.wallet.entity.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

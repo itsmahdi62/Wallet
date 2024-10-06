@@ -42,7 +42,7 @@ public class JwtHelper {
         return expiration.before(new Date());
     }
 
-    //generate token for user
+    //generate token for person
     public String generateToken(Person person) {
         Map<String, Object> claims = new HashMap<>();
         return generateToken(claims, person.getNationalId());

@@ -2,7 +2,7 @@ package com.example.wallet.service;
 
 import com.example.wallet.entity.Account;
 import com.example.wallet.entity.Person;
-import com.example.wallet.repository.AccountRepository;
+import com.example.wallet.security.repository.AccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class AccountService {
 
     public Account updateAccountInfo(Long id, Account account) {
         Account updateAccount = accountRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("User not found ! "));
+                .orElseThrow(()-> new EntityNotFoundException("Person not found ! "));
 //        updateAccount.setEmail(person.getEmail());
 //        updateAccount.setPhoneNumber(person.getPhoneNumber());
         return accountRepository.save(updateAccount);
@@ -51,7 +51,7 @@ public class AccountService {
 
     public void deleteAccount(Long id) {
         Account deleteAccount = accountRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("User not found ! "));
+                .orElseThrow(()-> new EntityNotFoundException("Person not found ! "));
         deleteAccount.setDeletedDate(String.valueOf(LocalDate.now()));
         accountRepository.save(deleteAccount);
     }

@@ -3,8 +3,9 @@ package com.example.wallet.service;
 import com.example.wallet.entity.Account;
 import com.example.wallet.entity.Person;
 import com.example.wallet.entity.Transaction;
-import com.example.wallet.repository.AccountRepository;
-import com.example.wallet.repository.TransactionRepository;
+import com.example.wallet.security.repository.AccountRepository;
+import com.example.wallet.security.repository.TransactionRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class TransactionService {
     private final AccountRepository accountRepository;
 
     public void createTransaction(Transaction transaction) {
-        // getting user from authorization header
+        // getting person from authorization header
         String nationalId = SecurityContextHolder.getContext().getAuthentication().getName();
         Person person = personService.findByNationalId(nationalId);
 
@@ -48,14 +49,22 @@ public class TransactionService {
             finalAmount = transaction.getTransactionAmount() - transactionFee - tax ;
             account.setAccountBalance(account.getAccountBalance() + finalAmount);
         } else {
+            // calculate fee and tax
             finalAmount = transaction.getTransactionAmount() + transactionFee + tax ;
+
+            // calculate daily transfer amount and it's a assignment
+            account.setDailyTransferAmount(account.getDailyTransferAmount() + finalAmount );
+
             if (account.getAccountBalance() - 10000 < finalAmount) {
                 throw new RuntimeException("Insufficient balance");
             } else if (finalAmount > 10000000) {
                 throw new RuntimeException("You have reach the limit of daily transaction amount");
             } else if (finalAmount < 100000) {
                 throw new RuntimeException("Your transaction must be more than 100,000 rial");
+            } else if (account.getDailyTransferAmount() > 10000000) {
+                throw new RuntimeException("You have reached the maximum amount of daily withdraw");
             }
+
             account.setAccountBalance(account.getAccountBalance() - finalAmount);
         }
 
@@ -66,12 +75,16 @@ public class TransactionService {
             account.setAccountTransactionList(new ArrayList<>()); // Initialize if null
         }
         account.getAccountTransactionList().add(transaction);
-
         accountRepository.save(account);
     }
 
     public List<Transaction> findAllTransactions() {
-        return transactionRepository.findAll();
+        return transactionRepository.listOfExistingTransactions();
     }
 
+    public void deleteTransaction(Long id) {
+        Transaction deleteTransaction =  transactionRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Transaction not found ! "));
+        deleteTransaction.setDeletedDate(LocalDate.now());
+    }
 }

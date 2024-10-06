@@ -1,13 +1,11 @@
 package com.example.wallet.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Entity(name = "person")
 @Table(name = "person")
@@ -17,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class Person  implements Serializable {
+public class Person implements Serializable {
     @Id
     @GeneratedValue(generator = "ps")
     private Long id;

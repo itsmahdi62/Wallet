@@ -2,17 +2,13 @@ package com.example.wallet.service;
 
 import com.example.wallet.entity.Account;
 import com.example.wallet.entity.Person;
-import com.example.wallet.repository.PersonRepository;
+import com.example.wallet.security.repository.PersonRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.proxy.EntityNotFoundDelegate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -28,23 +24,20 @@ public class PersonService {
     public Person savePerson(Person person) {
         Person savedPerson = personRepository.save(person);
         // Refactor the code and send this part to Account service
-        // This line make a default account for each user
+        // This line make a default account for each person
         Account account = accountService.createAccount(savedPerson);
         savedPerson.setAccount(account);
-//        Account account = accountService.createAccount(savedPerson);
-//        List<Account> personAccount = Arrays.asList(account);
-//        savedPerson.setAccountList(personAccount);
 
         return personRepository.save(savedPerson);
     }
 
-    public List<Person> findAll() {
+    public List<Person> findAllPeople() {
         return personRepository.listOfExistingPeople();
     }
 
     public Person updatePersonInfo(Long id, Person person) {
         Person updatePerson = personRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("User not found ! "));
+                .orElseThrow(()-> new EntityNotFoundException("Person not found ! "));
         updatePerson.setEmail(person.getEmail());
         updatePerson.setPhoneNumber(person.getPhoneNumber());
         return personRepository.save(updatePerson);
@@ -52,7 +45,7 @@ public class PersonService {
 
     public  void deleteUser(Long id) {
         Person deletePerson = personRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("User not found ! "));
+                .orElseThrow(()-> new EntityNotFoundException("Person not found ! "));
         deletePerson.setDeletedDate(String.valueOf(LocalDate.now()));
         personRepository.save(deletePerson);
     }
@@ -60,14 +53,14 @@ public class PersonService {
     public Person findByNationalId(String nationalId) {
         Person person = personRepository.findByNationalId(nationalId);
         if (person == null) {
-            throw new EntityNotFoundException("User not found with nationalId: " + nationalId);
+            throw new EntityNotFoundException("Person not found with nationalId: " + nationalId);
         }
         return person;
     }
 
     public Person findOneById(Long id) {
         Person foundPerson = personRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("User not found ! "));
+                .orElseThrow(()-> new EntityNotFoundException("Person not found ! "));
         return foundPerson;
     }
 }

@@ -1,7 +1,7 @@
 package com.example.wallet.service;
 
 import com.example.wallet.entity.Account;
-import com.example.wallet.repository.AccountRepository;
+import com.example.wallet.security.repository.AccountRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;

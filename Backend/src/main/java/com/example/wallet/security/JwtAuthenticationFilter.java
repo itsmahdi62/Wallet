@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -55,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if(userNationalId != null && SecurityContextHolder.getContext().getAuthentication()==null ){
-            // fetch user details
+            // fetch person details
             logger.info("ddd");
             Person person = personService.findByNationalId(userNationalId); // Find person by `userNationalId`
             if (jwtHelper.validateToken(token, person)) {
@@ -67,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 logger.warn(SecurityContextHolder.getContext());
 
             }else{
-                logger.warn("Token validation failed for user: " + userNationalId);
+                logger.warn("Token validation failed for person: " + userNationalId);
             }
         }
         filterChain.doFilter(request, response);

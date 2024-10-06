@@ -32,4 +32,5 @@ public class Transaction implements Serializable {
 
     // this could be enumeration
     private boolean isDeposit ;
+    private LocalDate deletedDate;
 }

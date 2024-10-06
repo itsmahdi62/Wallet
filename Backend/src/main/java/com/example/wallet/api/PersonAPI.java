@@ -23,8 +23,8 @@ public class PersonAPI {
     private final  PersonService personService;
     private final JwtHelper jwtHelper ;
     @GetMapping("/getAllUsers")
-    public ResponseEntity<List<Person>> findAll() {
-        List<Person> personList = personService.findAll(); // Call to personService to fetch all users
+    public ResponseEntity<List<Person>> getAllPeople() {
+        List<Person> personList = personService.findAllPeople(); // Call to personService to fetch all users
         if (personList == null || personList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Return 204 No Content if the list is empty
         }
@@ -32,8 +32,8 @@ public class PersonAPI {
     }
     @PostMapping("/signup" )
     @ResponseBody
-    public ResponseEntity<Map> save(@Valid @RequestBody Person newperson) {
-       //  if we had user and admin roles in our entity this line of code would let anyone  be an admin
+    public ResponseEntity<Map> createPerson(@Valid @RequestBody Person newperson) {
+       //  if we had person and admin roles in our entity this line of code would let anyone  be an admin
         Person person = new Person();
         person.setNationalId(newperson.getNationalId());
         person.setName(newperson.getName());
@@ -65,7 +65,7 @@ public class PersonAPI {
 
     @PostMapping("/update-user-info/{id}")
     @ResponseBody
-    public ResponseEntity<Person> updateUserInfo(@PathVariable Long id,@Valid @RequestBody Person person) {
+    public ResponseEntity<Person> updatePerson(@PathVariable Long id, @Valid @RequestBody Person person) {
         Person updatedPerson = personService.updatePersonInfo(id, person);
         return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
     }
@@ -74,12 +74,12 @@ public class PersonAPI {
     @ResponseBody
     public ResponseEntity<String> deleteUser(@PathVariable Long id ){
         personService.deleteUser(id);
-        return new ResponseEntity<>("User deleted ! " , HttpStatus.OK);
+        return new ResponseEntity<>("Person deleted ! " , HttpStatus.OK);
     }
 
     @GetMapping("/findOneById/{id}")
     @ResponseBody
-    public  ResponseEntity<Person> findOneById(@PathVariable Long id ){
+    public  ResponseEntity<Person> findPersonById(@PathVariable Long id ){
         Person person = personService.findOneById(id); // Call to personService to fetch all users
         if (person == null ) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Return 204 No Content if the list is empty
