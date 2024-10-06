@@ -8,7 +8,7 @@ import com.example.wallet.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
+import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -21,40 +21,57 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
 
-    public void createTransaction(Long amount, String transactionType) {
-        // گرفتن کاربر فعلی از JWT
+    public void createTransaction(Transaction transaction) {
+        // getting user from authorization header
         String nationalId = SecurityContextHolder.getContext().getAuthentication().getName();
         Person person = personService.findByNationalId(nationalId);
 
-        // بازیابی حساب کاربر
-//        List<Account> accountList = person.getAccountList();
-//        Account account = accountList.get(0);
         Account account = person.getAccount();
 
-        // محاسبه موجودی بعد از تراکنش
-        long accountBalanceAfterTransaction;
-        if ("deposit".equals(transactionType)) {
-            accountBalanceAfterTransaction = account.getAccountBalance() + amount;
-        } else if ("withdraw".equals(transactionType)) {
-            if (account.getAccountBalance() < amount) {
-                throw new RuntimeException("Insufficient balance");
-            }
-            accountBalanceAfterTransaction = account.getAccountBalance() - amount;
+        // calculating transaction tax
+        long tax = (long) (transaction.getTransactionAmount() * 0.05);
+
+        // calculating transaction fee
+        int transactionFee = 0;
+        if(transaction.getTransactionAmount() > 1000000)
+        {
+            transactionFee = 7200;
+        }else {
+            transactionFee = 20000;
+        }
+        long finalAmount ;
+
+        // calculating account balance after transaction
+        // wow !!! in lombok for boolean variable we say transaction.isDeposit() instead of transaction.getIsDeposit()
+        // validating transaction
+        if (transaction.isDeposit()) {
+            finalAmount = transaction.getTransactionAmount() - transactionFee - tax ;
+            account.setAccountBalance(account.getAccountBalance() + finalAmount);
         } else {
-            throw new IllegalArgumentException("Invalid transaction type");
+            finalAmount = transaction.getTransactionAmount() + transactionFee + tax ;
+            if (account.getAccountBalance() - 10000 < finalAmount) {
+                throw new RuntimeException("Insufficient balance");
+            } else if (finalAmount > 10000000) {
+                throw new RuntimeException("You have reach the limit of daily transaction amount");
+            } else if (finalAmount < 100000) {
+                throw new RuntimeException("Your transaction must be more than 100,000 rial");
+            }
+            account.setAccountBalance(account.getAccountBalance() - finalAmount);
         }
 
-        // ایجاد تراکنش جدید
-        Transaction transaction = new Transaction();
-//        transaction.setAccount(account);
-        transaction.setDailyTransactionAmount(amount);
-        transaction.setAccountBalanceAfterTransaction(accountBalanceAfterTransaction);
+
         transaction.setTime(LocalTime.now());
         transaction.setDate(LocalDate.now());
-        transactionRepository.save(transaction);
-
-        // به‌روزرسانی موجودی حساب
-        account.setAccountBalance(accountBalanceAfterTransaction);
+        if (account.getAccountTransactionList() == null) {
+            account.setAccountTransactionList(new ArrayList<>()); // Initialize if null
+        }
+        account.getAccountTransactionList().add(transaction);
+        account.setDailyTransferAmount(0);
         accountRepository.save(account);
     }
+
+    public List<Transaction> findAllTransactions() {
+        return transactionRepository.findAll();
+    }
+
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("*")
 public class NotFoundRoutes {
-    public ResponseEntity<String> nofFoundroutes(){
+    public ResponseEntity<String> notFoundRoutes(){
         return new ResponseEntity<>("This route does not exist" , HttpStatus.NOT_FOUND);
     }
 }

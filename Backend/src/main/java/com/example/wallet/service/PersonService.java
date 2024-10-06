@@ -43,12 +43,10 @@ public class PersonService {
     }
 
     public Person updatePersonInfo(Long id, Person person) {
-        log.info("in person service before");
         Person updatePerson = personRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("User not found ! "));
         updatePerson.setEmail(person.getEmail());
         updatePerson.setPhoneNumber(person.getPhoneNumber());
-        log.info("in person service after");
         return personRepository.save(updatePerson);
     }
 

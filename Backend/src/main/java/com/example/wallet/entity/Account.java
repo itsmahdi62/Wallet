@@ -3,6 +3,7 @@ package com.example.wallet.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -24,19 +25,14 @@ public class Account implements Serializable {
     @Id
     private Long id;
 
-//    @OneToOne(mappedBy = "account" , fetch = FetchType.LAZY)
-//     @JsonBackReference  // Handling the back reference
-//    private Person person;
-
-//    @OneToMany(mappedBy = "account")
-//    private List<Transaction> accountTransactionList ;
+    @OneToMany(mappedBy = "account")
+    private List<Transaction> accountTransactionList ;
 
     @Column(name="account_number" , unique = true)
     @NotEmpty(message = "Account Number can not be empty")
     @Pattern(regexp = "^\\d{13}$" ,  message = "Account number id must be 13 numbers !")
     private String accountNumber;
 
-    @Min(1000)
     @Column(name="account_balance")
     private Long accountBalance;
 
@@ -48,4 +44,8 @@ public class Account implements Serializable {
 
     @Column(name = "deleted_date", nullable = true)
     private String deletedDate = null;
+
+    @Max(10000000)
+    private Long dailyTransferAmount = 0L;
+
 }

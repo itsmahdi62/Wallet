@@ -1,6 +1,7 @@
 package com.example.wallet.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import java.io.Serializable;
@@ -20,16 +21,15 @@ public class Transaction implements Serializable {
     @Id
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "account_id", nullable = false)
-//    private Account account;
     // private LocalDateTime
     private LocalTime time ;
     private LocalDate date ;
-
     @Column(name="transaction_amount")
+    @Min(100000)
     private Long transactionAmount;
-    private Long accountBalanceAfterTransaction;
-    private Long dailyTransactionAmount ;
 
+    private Long accountBalanceAfterTransaction;
+
+    // this could be enumeration
+    private boolean isDeposit ;
 }

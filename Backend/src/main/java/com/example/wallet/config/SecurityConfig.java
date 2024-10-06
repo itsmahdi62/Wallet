@@ -29,7 +29,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/api/v1/person/signup").permitAll()  // Allow access to /signup without authentication
-                        .anyRequest().permitAll()  // Require authentication for all other routes
+                        .anyRequest().authenticated()  // Require authentication for all other routes
+
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(entryPoint))
                 .csrf(AbstractHttpConfigurer::disable);  // Disable CSRF (if you're not using sessions)
