@@ -66,7 +66,7 @@ public class TransactionService {
             account.setAccountTransactionList(new ArrayList<>()); // Initialize if null
         }
         account.getAccountTransactionList().add(transaction);
-        account.setDailyTransferAmount(0);
+
         accountRepository.save(account);
     }
 
