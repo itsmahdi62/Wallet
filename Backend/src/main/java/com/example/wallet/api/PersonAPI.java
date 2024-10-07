@@ -65,7 +65,7 @@ public class PersonAPI {
 
     @PostMapping("/update-user-info/{id}")
     @ResponseBody
-    public ResponseEntity<Person> updatePerson(@PathVariable Long id, @Valid @RequestBody Person person) {
+    public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody Person person) {
         Person updatedPerson = personService.updatePersonInfo(id, person);
         return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
     }
