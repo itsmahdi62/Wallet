@@ -1,4 +1,4 @@
-package com.example.wallet.security.repository;
+package com.example.wallet.repository;
 
 import com.example.wallet.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;

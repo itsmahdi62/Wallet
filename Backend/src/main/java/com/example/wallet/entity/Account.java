@@ -25,7 +25,7 @@ public class Account implements Serializable {
     @Id
     private Long id;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Transaction> accountTransactionList ;
 
     @Column(name="account_number" , unique = true)

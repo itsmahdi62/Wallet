@@ -2,7 +2,7 @@ package com.example.wallet.service;
 
 import com.example.wallet.entity.Account;
 import com.example.wallet.entity.Person;
-import com.example.wallet.security.repository.AccountRepository;
+import com.example.wallet.repository.AccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+
 public class AccountService {
 
     private final AccountRepository accountRepository ;

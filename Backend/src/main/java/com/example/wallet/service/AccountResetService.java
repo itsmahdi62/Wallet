@@ -1,7 +1,8 @@
 package com.example.wallet.service;
 
 import com.example.wallet.entity.Account;
-import com.example.wallet.security.repository.AccountRepository;
+import com.example.wallet.repository.AccountRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AccountResetService {
 
-    @Autowired
-    private AccountRepository accountRepository;  // Assuming you have a repository for Account
+    private final AccountRepository accountRepository;  // Assuming you have a repository for Account
 
     @Scheduled(cron = "0 0 0 * * ?")  // Executes every day at 00:00 AM
     public void resetDailyTransferAmount() {

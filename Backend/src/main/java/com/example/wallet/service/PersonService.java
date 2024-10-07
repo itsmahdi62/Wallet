@@ -2,7 +2,7 @@ package com.example.wallet.service;
 
 import com.example.wallet.entity.Account;
 import com.example.wallet.entity.Person;
-import com.example.wallet.security.repository.PersonRepository;
+import com.example.wallet.repository.PersonRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

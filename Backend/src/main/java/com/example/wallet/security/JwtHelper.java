@@ -19,7 +19,7 @@ public class JwtHelper {
     public static final long JWT_TOKEN_VALIDITY = 1000 * 60*60;
     private String secret="09391395538Amir!09391395538Amir!";
 
-    // retrieve username
+    // retrieve national Id
     public String getNationalIdFromToken(String token){
         return  getClaimFromToken(token , Claims::getSubject);
     }
