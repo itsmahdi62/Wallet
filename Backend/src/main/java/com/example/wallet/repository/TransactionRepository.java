@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Query("select o from transaction o where o.deletedDate is null")
+    @Query("select o from account_transaction o where o.deletedDate is null")
     List<Transaction> listOfExistingTransactions();
 }

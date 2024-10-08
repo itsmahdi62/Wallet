@@ -25,8 +25,7 @@ public class Account implements Serializable {
     @Id
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Transaction> accountTransactionList ;
+
 
     @Column(name="account_number" , unique = true)
     @NotEmpty(message = "Account Number can not be empty")
@@ -47,5 +46,9 @@ public class Account implements Serializable {
 
     @Max(10000000)
     private Long dailyTransferAmount = 0L;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "account_transaction_id",  referencedColumnName = "id")
+    private List<Transaction> accountTransactionList ;
 
 }

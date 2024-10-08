@@ -1,5 +1,6 @@
 package com.example.wallet.entity;
 
+import com.example.wallet.entity.PersonEnums.MilitaryServiceStatus;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.*;
@@ -34,9 +35,14 @@ public class Person implements Serializable {
     @Pattern(regexp = "^09\\d{9}$" , message = "Invalid input !")
     private String phoneNumber;
 
-    private String dateOfBirth;
+    private int dayOfBirth;
+    private int monthOfBirth;
+    @NotNull(message = "Year of birth must have been chosen")
+    private int yearOfBirth;
 
-    private Boolean isMail;
+
+    @NotNull(message = "Gender must be selected ")
+    private Boolean isMale;
 
     @Enumerated(EnumType.STRING)  // Persisting Enum as String
     private MilitaryServiceStatus militaryServiceStatus;
@@ -45,7 +51,7 @@ public class Person implements Serializable {
     @Email(message = "Email should be valid")
     private String email;
 
-    @NotNull(message = "Age cannot be empty")
+    @NotNull(message = "Year of birth cannot be empty")
     private int age;
     // for logical delete
     private String deletedDate = null;
@@ -55,9 +61,8 @@ public class Person implements Serializable {
      */
     private boolean isValid = true;
 
-
-    @OneToOne(cascade = CascadeType.ALL )
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
-//     @JsonManagedReference  // Managing the forward reference
     private Account account;
+    
 }

@@ -9,8 +9,8 @@ import java.time.LocalDate;
 //import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@Entity(name="transaction")
-@Table(name="transaction")
+@Entity(name="account_transaction")
+@Table(name="account_transaction")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,10 +22,11 @@ public class Transaction implements Serializable {
     private Long id;
 
     // private LocalDateTime
-    private LocalTime time ;
-    private LocalDate date ;
+    
+    private LocalTime createdTime ;
+    private LocalDate createdDate ;
     @Column(name="transaction_amount")
-    @Min(100000)
+    @Min(100000L)
     private Long transactionAmount;
 
     private Long accountBalanceAfterTransaction;

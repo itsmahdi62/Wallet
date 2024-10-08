@@ -1,4 +1,4 @@
-package com.example.wallet.entity;
+package com.example.wallet.entity.PersonEnums;
 
 public enum MilitaryServiceStatus {
     COMPLETED,

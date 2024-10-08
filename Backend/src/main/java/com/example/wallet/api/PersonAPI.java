@@ -10,6 +10,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,12 +40,16 @@ public class PersonAPI {
         person.setNationalId(newperson.getNationalId());
         person.setName(newperson.getName());
         person.setFamily(newperson.getFamily());
-        person.setAge(newperson.getAge());
+
         person.setPhoneNumber(newperson.getPhoneNumber());
-        person.setDateOfBirth(newperson.getDateOfBirth());
+        person.setDayOfBirth(newperson.getDayOfBirth());
+        person.setMonthOfBirth(newperson.getMonthOfBirth());
+        person.setYearOfBirth(newperson.getYearOfBirth());
         person.setEmail(newperson.getEmail());
-        person.setIsMail(newperson.getIsMail());
-        if(newperson.getIsMail() && newperson.getAge() >= 18){
+        person.setIsMale(newperson.getIsMale());
+
+        int newpersonAge = LocalDate.now().getYear() - newperson.getYearOfBirth() ;
+        if(newperson.getIsMale() && newpersonAge >= 18){
             if(newperson.getMilitaryServiceStatus() == null){
                 throw new IllegalArgumentException("Military service status must be provided for males 18 years or older.");
             }

@@ -33,7 +33,6 @@ public class SecurityConfig {
                         .requestMatchers("api/v1/account").authenticated()
                         .requestMatchers("api/v1/transaction").authenticated()
                         .anyRequest().permitAll()  // Allow access for all other routes
-
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(entryPoint))
                 .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF (if you're not using sessions)
