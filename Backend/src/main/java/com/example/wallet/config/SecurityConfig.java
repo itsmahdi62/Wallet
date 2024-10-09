@@ -30,8 +30,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/api/v1/person/signup").permitAll()  // Allow access to sign up without authentication
                         .requestMatchers("/api/v1/person").authenticated() // allow authenticated access
-                        .requestMatchers("api/v1/account").authenticated()
-                        .requestMatchers("api/v1/transaction").authenticated()
+                        .requestMatchers("/api/v1/account").authenticated()
+                        .requestMatchers("/api/v1/transaction").authenticated()
                         .anyRequest().permitAll()  // Allow access for all other routes
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(entryPoint))

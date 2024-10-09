@@ -6,7 +6,6 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-//import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity(name="account_transaction")
@@ -33,5 +32,5 @@ public class Transaction implements Serializable {
 
     // this could be enumeration
     private boolean isDeposit ;
-    private LocalDate deletedDate;
+    private String deletedDate;
 }

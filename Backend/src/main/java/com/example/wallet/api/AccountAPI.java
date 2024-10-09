@@ -24,10 +24,10 @@ public class AccountAPI {
         }
         return new ResponseEntity<>(accountList, HttpStatus.OK); // Return the list with 200 OK status
     }
+    
     @PostMapping("/createAccount")
     @ResponseBody
     public ResponseEntity<Account> createAccount(@Valid @RequestBody Person currentPerson) {
-
         return  new ResponseEntity<>(accountService.createAccount(currentPerson), HttpStatus.OK);
     }
 

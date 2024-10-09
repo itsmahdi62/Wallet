@@ -55,16 +55,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if(userNationalId != null && SecurityContextHolder.getContext().getAuthentication()==null ){
             // fetch person details
-            logger.info("ddd");
+
             Person person = personService.findByNationalId(userNationalId); // Find person by `userNationalId`
             if (jwtHelper.validateToken(token, person)) {
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(person, null, new ArrayList<>()); // No authorities for now
+                        new UsernamePasswordAuthenticationToken(token, null, new ArrayList<>()); // No authorities for now
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 logger.warn(SecurityContextHolder.getContext().getAuthentication());
-                logger.warn(SecurityContextHolder.getContext());
-
             }else{
                 logger.warn("Token validation failed for person: " + userNationalId);
             }

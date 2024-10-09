@@ -13,5 +13,6 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     public Person findByNationalId(String nationalId);
 
+
     public Optional<Person> findById(Long id);
 }

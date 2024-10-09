@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("api/v1/transaction/")
 @RequiredArgsConstructor
 public class TransactionAPI {
-    private TransactionService transactionService;
+    private final  TransactionService transactionService;
     @GetMapping("/getAll")
     @ResponseBody
     public ResponseEntity<List<Transaction>> getAllTransactions(){
@@ -24,6 +24,7 @@ public class TransactionAPI {
         }
         return new ResponseEntity<>(transactionList , HttpStatus.OK);
     }
+    
     @PostMapping("/createTransaction")
     @ResponseBody
     public ResponseEntity<String> createTransaction(@RequestBody Transaction transaction){

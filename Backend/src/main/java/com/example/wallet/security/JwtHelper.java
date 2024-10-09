@@ -3,6 +3,10 @@ package com.example.wallet.security;
 import com.example.wallet.entity.Person;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 
@@ -15,33 +19,10 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
+@Slf4j
 public class JwtHelper {
     public static final long JWT_TOKEN_VALIDITY = 1000 * 60*60;
     private String secret="09391395538Amir!09391395538Amir!";
-
-    // retrieve national Id
-    public String getNationalIdFromToken(String token){
-        return  getClaimFromToken(token , Claims::getSubject);
-    }
-    
-    private <T> T getClaimFromToken(String token , Function<Claims ,T> claimResolver){
-        final Claims claims = getAllClaimsFromToken(token);
-        return claimResolver.apply(claims);
-    }
-
-    private Claims getAllClaimsFromToken(String token) {
-        Key hmacKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8) , "HmacSHA256");
-        return Jwts.parserBuilder()
-                .setSigningKey(hmacKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-    private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
-    }
-
     //generate token for person
     public String generateToken(Person person) {
         Map<String, Object> claims = new HashMap<>();
@@ -67,6 +48,43 @@ public class JwtHelper {
         return (nationalId.equals(person.getNationalId()) && !isTokenExpired(token));
     }
 
+
+
+    public String getUserNationalIdFromJWTWithoutUsingReq() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        System.out.println("+++++ " + authentication.getPrincipal());
+        String token = (String) authentication.getPrincipal();
+        System.out.println(token);
+        log.debug("Extracted token from SecurityContext: {}", token);
+        if (token == null || token.isEmpty()) {
+            throw new IllegalArgumentException("JWT String argument cannot be null or empty.dddd");
+        }
+        return this.getNationalIdFromToken(token);
+    }
+
+    // retrieve national id from token
+    public String getNationalIdFromToken(String token){
+        return  getClaimFromToken(token , Claims::getSubject);
+    }
+
+    private <T> T getClaimFromToken(String token , Function<Claims ,T> claimResolver){
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimResolver.apply(claims);
+    }
+
+    private Claims getAllClaimsFromToken(String token) {
+        Key hmacKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8) , "HmacSHA256");
+        return Jwts.parserBuilder()
+                .setSigningKey(hmacKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
