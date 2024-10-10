@@ -33,7 +33,7 @@ public class TransactionService {
     public void createTransaction(Transaction transaction) {
         // getting person from authorization header
         String nationalId = jwtHelper.getUserNationalIdFromJWTWithoutUsingReq();
-        System.out.println(nationalId);
+        //System.out.println(nationalId);
         Person person = personService.findByNationalId(nationalId);
 
         Account account = person.getAccount();
@@ -88,14 +88,26 @@ public class TransactionService {
     }
 
     public List<Transaction> findAllTransactions() {
-        return transactionRepository.listOfExistingTransactions();
+        // getting person from authorization header
+        String nationalId = jwtHelper.getUserNationalIdFromJWTWithoutUsingReq();
+        return transactionRepository.findAllTransactionsByNationalId(nationalId);
     }
 
-    
-    
     public void deleteTransaction(Long id) {
         Transaction deleteTransaction =  transactionRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Transaction not found ! "));
         deleteTransaction.setDeletedDate(String.valueOf(LocalDate.now()));
+    }
+    
+    public List<Transaction> findAllDepositTransactions(){
+        // getting person from authorization header
+        String nationalId = jwtHelper.getUserNationalIdFromJWTWithoutUsingReq();
+    	return transactionRepository.findAllDepositTransactions(nationalId);
+    }
+
+    public List<Transaction> findAllWithdrawTransactions(){
+        // getting person from authorization header
+        String nationalId = jwtHelper.getUserNationalIdFromJWTWithoutUsingReq();
+    	return transactionRepository.findAllWithdrawTransactions(nationalId);
     }
 }

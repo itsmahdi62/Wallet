@@ -39,6 +39,25 @@ public class TransactionAPI {
         return new ResponseEntity<>("Transaction deleted" , HttpStatus.OK);
     }
 
+    @GetMapping("/getAllDepositTransactions")
+    @ResponseBody
+    public ResponseEntity<List<Transaction>> getAllDepositTransactions(){
+    	List<Transaction> transactionList = transactionService.findAllDepositTransactions();
+        if (transactionList == null || transactionList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Return 204 No Content if the list is empty
+        }
+        return new ResponseEntity<>(transactionList , HttpStatus.OK);
+    }
+//
+    @GetMapping("/getAllWithdrawTransactions")
+    @ResponseBody
+    public ResponseEntity<List<Transaction>> getAllWithdrawTransactions(){
+    	List<Transaction> transactionList = transactionService.findAllWithdrawTransactions();
+        if (transactionList == null || transactionList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Return 204 No Content if the list is empty
+        }
+        return new ResponseEntity<>(transactionList , HttpStatus.OK);
+    }
     // write sort and select transaction by time and etc
 
 }

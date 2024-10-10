@@ -34,4 +34,6 @@ public class Transaction implements Serializable {
     @JsonProperty("isDeposit")   // Ensures correct mapping
     private boolean isDeposit ;
     private String deletedDate;
+
+
 }

@@ -47,6 +47,7 @@ public class Person implements Serializable {
     @Enumerated(EnumType.STRING)  // Persisting Enum as String
     private MilitaryServiceStatus militaryServiceStatus;
 
+    @Column(name = "email" , unique=true)
     @NotEmpty(message = "Email cannot be empty")
     @Email(message = "Email should be valid")
     private String email;

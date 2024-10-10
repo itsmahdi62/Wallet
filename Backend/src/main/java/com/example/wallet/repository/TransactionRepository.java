@@ -1,13 +1,32 @@
 package com.example.wallet.repository;
 
+import com.example.wallet.entity.Person;
 import com.example.wallet.entity.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Query("select o from account_transaction o where o.deletedDate is null")
-    List<Transaction> listOfExistingTransactions();
+    @Query("SELECT t FROM person p " +
+            "JOIN p.account a " +
+            "JOIN a.accountTransactionList t " +
+            "WHERE p.nationalId = :nationalId")
+    List<Transaction> findAllTransactionsByNationalId(@Param("nationalId") String nationalId);
+
+    @Query("SELECT t FROM person p " +
+            "JOIN p.account a " +
+            "JOIN a.accountTransactionList t " +
+            "WHERE p.nationalId = :nationalId and t.isDeposit = true ")
+    List<Transaction> findAllDepositTransactions(@Param("nationalId") String nationalId);
+
+    @Query("SELECT t FROM person p " +
+            "JOIN p.account a " +
+            "JOIN a.accountTransactionList t " +
+            "WHERE p.nationalId = :nationalId and t.isDeposit = false ")
+    List<Transaction> findAllWithdrawTransactions(@Param("nationalId") String nationalId);
+
+
 }
