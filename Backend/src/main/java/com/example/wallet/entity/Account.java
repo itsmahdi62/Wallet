@@ -25,8 +25,6 @@ public class Account implements Serializable {
     @Id
     private Long id;
 
-
-
     @Column(name="account_number" , unique = true)
     @NotEmpty(message = "Account Number can not be empty")
     @Pattern(regexp = "^\\d{13}$" ,  message = "Account number id must be 13 numbers !")
@@ -45,7 +43,7 @@ public class Account implements Serializable {
     private String deletedDate = null;
 
     @Max(10000000)
-    private Long dailyTransferAmount = 0L;
+    private Long dailyWithdrawAmount = 0L;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_transaction_id",  referencedColumnName = "id")

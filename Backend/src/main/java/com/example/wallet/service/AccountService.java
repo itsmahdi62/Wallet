@@ -22,8 +22,8 @@ public class AccountService {
         // Set account number
         // Account.setAccountNumber( 1000000000 + savedPerson.getId()); wrong way
         String idString = String.valueOf(savedPerson.getId());
-        String zeros = "0".repeat(13 - idString.length());
-        String finalAccountNumber = zeros + idString;
+        String zeros = "0".repeat(12 - idString.length());
+        String finalAccountNumber = "1" + zeros + idString;
         account.setAccountNumber(finalAccountNumber);
 
         // set shaba number

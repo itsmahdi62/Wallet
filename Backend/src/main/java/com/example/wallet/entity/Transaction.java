@@ -1,5 +1,6 @@
 package com.example.wallet.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
@@ -30,7 +31,7 @@ public class Transaction implements Serializable {
 
     private Long accountBalanceAfterTransaction;
 
-    // this could be enumeration
+    @JsonProperty("isDeposit")   // Ensures correct mapping
     private boolean isDeposit ;
     private String deletedDate;
 }

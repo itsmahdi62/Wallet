@@ -1,5 +1,6 @@
 package com.example.wallet.ControllerAdvice;
 
+import com.example.wallet.Exception.InsufficientBalance;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -53,6 +54,14 @@ public class ApplicationExceptionHandler {
     public Map<String, String> handleNotFound(NoHandlerFoundException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error", "The page you are looking for does not exist.");
+        return errorMap;
+    }
+
+    @ExceptionHandler(InsufficientBalance.class)
+    @ResponseStatus(HttpStatus.INSUFFICIENT_STORAGE)
+    public Map<String, String> handleInsufficientBalanceException(InsufficientBalance ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("error", ex.getMessage());
         return errorMap;
     }
 }

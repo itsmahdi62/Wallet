@@ -20,7 +20,7 @@ public class AccountResetService {
         // Reset dailyTransferAmount for all accounts
         List<Account> accounts = accountRepository.findAll();
         for (Account account : accounts) {
-            account.setDailyTransferAmount(0L);
+            account.setDailyWithdrawAmount(0L);
         }
         accountRepository.saveAll(accounts);  // Save the changes
     }

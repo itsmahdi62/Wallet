@@ -53,10 +53,8 @@ public class JwtHelper {
     public String getUserNationalIdFromJWTWithoutUsingReq() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        System.out.println("+++++ " + authentication.getPrincipal());
         String token = (String) authentication.getPrincipal();
-        System.out.println(token);
-        log.debug("Extracted token from SecurityContext: {}", token);
+//        log.debug("Extracted token from SecurityContext: {}", token);
         if (token == null || token.isEmpty()) {
             throw new IllegalArgumentException("JWT String argument cannot be null or empty.dddd");
         }

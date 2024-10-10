@@ -62,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(token, null, new ArrayList<>()); // No authorities for now
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                logger.warn(SecurityContextHolder.getContext().getAuthentication());
+//                logger.warn(SecurityContextHolder.getContext().getAuthentication());
             }else{
                 logger.warn("Token validation failed for person: " + userNationalId);
             }
