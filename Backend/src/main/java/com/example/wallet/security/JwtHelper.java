@@ -4,6 +4,8 @@ import com.example.wallet.entity.Person;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +24,8 @@ import java.util.function.Function;
 @Slf4j
 public class JwtHelper {
     public static final long JWT_TOKEN_VALIDITY = 1000 * 60*60;
-    private String secret="09391395538Amir!09391395538Amir!";
+    @Value("${spring.datasource.secret_key}")
+    private String secret;
     //generate token for person
     public String generateToken(Person person) {
         Map<String, Object> claims = new HashMap<>();
@@ -56,7 +59,7 @@ public class JwtHelper {
         String token = (String) authentication.getPrincipal();
 //        log.debug("Extracted token from SecurityContext: {}", token);
         if (token == null || token.isEmpty()) {
-            throw new IllegalArgumentException("JWT String argument cannot be null or empty.dddd");
+            throw new IllegalArgumentException("JWT String argument cannot be null or empty.");
         }
         return this.getNationalIdFromToken(token);
     }

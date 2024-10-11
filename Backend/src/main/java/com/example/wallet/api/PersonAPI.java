@@ -40,7 +40,6 @@ public class PersonAPI {
         person.setNationalId(newperson.getNationalId());
         person.setName(newperson.getName());
         person.setFamily(newperson.getFamily());
-
         person.setPhoneNumber(newperson.getPhoneNumber());
         person.setDayOfBirth(newperson.getDayOfBirth());
         person.setMonthOfBirth(newperson.getMonthOfBirth());

@@ -13,19 +13,19 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("SELECT t FROM person p " +
             "JOIN p.account a " +
             "JOIN a.accountTransactionList t " +
-            "WHERE p.nationalId = :nationalId")
+            "WHERE p.nationalId = :nationalId and t.deletedDate is null")
     List<Transaction> findAllTransactionsByNationalId(@Param("nationalId") String nationalId);
 
     @Query("SELECT t FROM person p " +
             "JOIN p.account a " +
             "JOIN a.accountTransactionList t " +
-            "WHERE p.nationalId = :nationalId and t.isDeposit = true ")
+            "WHERE p.nationalId = :nationalId and t.isDeposit = true  and t.deletedDate is null ")
     List<Transaction> findAllDepositTransactions(@Param("nationalId") String nationalId);
 
     @Query("SELECT t FROM person p " +
             "JOIN p.account a " +
             "JOIN a.accountTransactionList t " +
-            "WHERE p.nationalId = :nationalId and t.isDeposit = false ")
+            "WHERE p.nationalId = :nationalId and t.isDeposit = false  and t.deletedDate is null ")
     List<Transaction> findAllWithdrawTransactions(@Param("nationalId") String nationalId);
 
 
