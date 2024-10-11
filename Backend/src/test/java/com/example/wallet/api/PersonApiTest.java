@@ -1,4 +1,4 @@
-package com.example.wallet.api.controller;
+package com.example.wallet.api;
 
 import com.example.wallet.entity.Person;
 import com.example.wallet.repository.PersonRepository;
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,10 +16,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
+//@SpringBootTest
+@WebMvcTest(PersonAPI.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")  // Ensure H2 is used for testing
-class PersonControllerTest {
+class PersonApiTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,7 +35,6 @@ class PersonControllerTest {
     void setUp() {
         personRepository.deleteAll();  // Clean up the database before each test
     }
-
     @Test
     void testCreatePerson() throws Exception {
         // Given
@@ -48,7 +48,6 @@ class PersonControllerTest {
                 .yearOfBirth(1990)
                 .isMale(true)
                 .email("john.doe@example.com")
-                .age(33)
                 .build();
 
         // When & Then
@@ -72,7 +71,6 @@ class PersonControllerTest {
                 .yearOfBirth(1990)
                 .isMale(true)
                 .email("john.doe@example.com")
-                .age(33)
                 .build();
         person = personRepository.save(person);
 
@@ -97,7 +95,6 @@ class PersonControllerTest {
                 .yearOfBirth(1990)
                 .isMale(true)
                 .email("john.doe@example.com")
-                .age(33)
                 .build();
         person = personRepository.save(person);
 

@@ -52,8 +52,6 @@ public class Person implements Serializable {
     @Email(message = "Email should be valid")
     private String email;
 
-    @NotNull(message = "Year of birth cannot be empty")
-    private int age;
     // for logical delete
     private String deletedDate = null;
     /*

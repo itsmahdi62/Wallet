@@ -1,4 +1,4 @@
-package com.example.wallet.api.service;
+package com.example.wallet.service;
 
 import com.example.wallet.entity.Person;
 import com.example.wallet.repository.PersonRepository;
@@ -38,7 +38,6 @@ class PersonServiceTest {
                 .yearOfBirth(1990)
                 .isMale(true)
                 .email("john.doe@example.com")
-                .age(33)
                 .build();
 
         personService.savePerson(person);
