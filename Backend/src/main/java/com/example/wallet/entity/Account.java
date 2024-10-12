@@ -37,7 +37,7 @@ public class Account implements Serializable {
     private String shaba;
 
     @Column(name = "creation_date")  // Explicit naming to avoid issues
-    private LocalDate CreationDate;
+    private LocalDate creationDate;
 
     @Column(name = "deleted_date", nullable = true)
     private String deletedDate = null;

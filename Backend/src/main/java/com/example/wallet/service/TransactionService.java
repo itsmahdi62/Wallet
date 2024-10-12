@@ -54,8 +54,9 @@ public class TransactionService {
         // wow !!! in lombok for boolean variable we say transaction.isDeposit() instead of transaction.getIsDeposit()
         // validating transaction
         if (transaction.isDeposit()) {
-            finalAmount = transaction.getTransactionAmount() - transactionFee - tax ;
-            account.setAccountBalance(account.getAccountBalance() + finalAmount);
+//            finalAmount = transaction.getTransactionAmount() - transactionFee - tax ;
+//            account.setAccountBalance(account.getAccountBalance() + finalAmount);
+            // I understood , we should not have fee and tax for deposit
             transaction.setAccountBalanceAfterTransaction(account.getAccountBalance());
         } else {
             // calculate fee and tax

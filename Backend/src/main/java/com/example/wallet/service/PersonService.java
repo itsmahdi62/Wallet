@@ -27,8 +27,8 @@ public class PersonService {
         // This line make a default account for each person
         Account account = accountService.createAccount(savedPerson);
         savedPerson.setAccount(account);
-
-        return personRepository.save(savedPerson);
+        Person lastPerson = personRepository.save(savedPerson);
+        return lastPerson;
     }
 
     public List<Person> findAllPeople() {
