@@ -45,8 +45,7 @@ public class AccountService {
     public Account updateAccountInfo(Long id, Account account) {
         Account updateAccount = accountRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Person not found ! "));
-//        updateAccount.setEmail(person.getEmail());
-//        updateAccount.setPhoneNumber(person.getPhoneNumber());
+        updateAccount.setAccountBalance(account.getAccountBalance());
         return accountRepository.save(updateAccount);
     }
 

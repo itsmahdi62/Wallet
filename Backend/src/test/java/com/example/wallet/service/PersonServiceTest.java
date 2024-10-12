@@ -174,6 +174,6 @@ class PersonServiceTest {
         assertEquals("new.email@example.com", resultPerson.getEmail(), "The email should be updated");
     }
 
-    // because wh use logical delete and it is like testUpdate we do not need testDelete
+    // because wh use logical delete , it is like testUpdate we do not need testDelete
 
 }
