@@ -33,7 +33,7 @@ public class Account implements Serializable {
     @Column(name="account_balance")
     private Long accountBalance;
 
-    @Pattern(regexp = "^IR\\d{24}$" ,  message = "Person national id must be 26 numbers !")
+    @Pattern(regexp = "^IR\\d{24}$" ,  message = "Shaba must be 26 numbers !")
     private String shaba;
 
     @Column(name = "creation_date")  // Explicit naming to avoid issues
