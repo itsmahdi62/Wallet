@@ -31,7 +31,7 @@ public class Person implements Serializable {
     private String family;
 
     @Column(name = "phone_number" , unique=true)
-    @NotEmpty(message = "personId can not be empty !")
+    @NotEmpty(message = "phone nummber can not be empty !")
     @Pattern(regexp = "^09\\d{9}$" , message = "Invalid input !")
     private String phoneNumber;
 

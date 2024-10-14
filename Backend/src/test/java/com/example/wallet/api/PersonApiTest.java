@@ -1,110 +1,156 @@
 package com.example.wallet.api;
 
 import com.example.wallet.entity.Person;
-import com.example.wallet.repository.PersonRepository;
+import com.example.wallet.security.JwtHelper;
+import com.example.wallet.service.PersonService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+class PersonAPITest {
 
-//@SpringBootTest
-@WebMvcTest(PersonAPI.class)
-@AutoConfigureMockMvc
-@ActiveProfiles("test")  // Ensure H2 is used for testing
-class PersonApiTest {
-
-    @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private PersonRepository personRepository;
+    @Mock
+    private PersonService personService;
 
-    @Autowired
-    private ObjectMapper objectMapper;  // Used for converting objects to JSON
+    @Mock
+    private JwtHelper jwtHelper;
+
+    @InjectMocks
+    private PersonAPI personAPI;
 
     @BeforeEach
-    void setUp() {
-        personRepository.deleteAll();  // Clean up the database before each test
+    public void setUp() {
+        // Initialize mocks and set up MockMvc
+        MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(personAPI).build();
     }
+
+    @Test
+    void testGetAllPeople() throws Exception {
+        // Mock the data
+        Person person1 = new Person();
+        person1.setName("Mahdi");
+        person1.setFamily("Almasi");
+        person1.setNationalId("3920841271");
+
+        Person person2 = new Person();
+        person2.setName("Mohammad");
+        person2.setFamily("Mohammadi");
+        person2.setNationalId("0987654321");
+
+        // Simulate service response
+        // whenever the personService.findAllPeople() method is called during the test,
+        // it should return a predefined list containing person1 and person2
+        when(personService.findAllPeople()).thenReturn(Arrays.asList(person1, person2));
+
+        // Perform the test request and validate the response
+        mockMvc.perform(get("/api/v1/person/getAllUsers"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name").value("Mahdi"))
+                .andExpect(jsonPath("$[1].name").value("Mohammad"));
+    }
+
     @Test
     void testCreatePerson() throws Exception {
-        // Given
-        Person person = Person.builder()
-                .nationalId("1234567890")
-                .name("John")
-                .family("Doe")
-                .phoneNumber("09123456789")
-                .dayOfBirth(1)
-                .monthOfBirth(1)
-                .yearOfBirth(1990)
-                .isMale(true)
-                .email("john.doe@example.com")
-                .build();
+        // Mock person data
+        Person person = new Person();
+        person.setId(1L);
+        person.setName("Mahdi");
+        person.setFamily("Almasi");
+        person.setNationalId("3920841271");
+        person.setEmail("amiralmasi021@gmail.com");
+        person.setPhoneNumber("09391395538");
+        person.setYearOfBirth(2001);
+        person.setMonthOfBirth(4);
+        person.setDayOfBirth(22);
+//        person.setMilitaryServiceStatus("COMPLETED");
+        person.setIsMale(true);
 
-        // When & Then
-        mockMvc.perform(post("/api/persons")
+        // Simulate the service and token generation
+        when(personService.savePerson(any(Person.class))).thenReturn(person);
+        when(jwtHelper.generateToken(any(Person.class))).thenReturn("dummyToken");
+
+        // Prepare the request body
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("name", "Mahdi");
+        requestBody.put("family", "Almasi");
+        requestBody.put("email" , "amiralmasi021@gmail.com");
+        requestBody.put("phoneNumber" , "09391395538");
+        requestBody.put("nationalId", "3920841271");
+        requestBody.put("militaryServiceStatus" , "COMPLETED");
+        requestBody.put("yearOfBirth", 2001);
+        requestBody.put("monthOfBirth", 4);
+        requestBody.put("dayOfBirth", 22);
+        requestBody.put("isMale", true);
+
+        // Perform the test request and validate the response
+        mockMvc.perform(post("/api/v1/person/signup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(person)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nationalId").value("1234567890"));
+                        .content(new ObjectMapper().writeValueAsString(requestBody)))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("Authorization", "Bearer dummyToken"))
+                .andExpect(jsonPath("$.person.name").value("Mahdi"))
+                .andExpect(jsonPath("$.token").value("dummyToken"));
     }
 
     @Test
-    void testGetPersonById() throws Exception {
-        // Given
-        Person person = Person.builder()
-                .nationalId("1234567890")
-                .name("John")
-                .family("Doe")
-                .phoneNumber("09123456789")
-                .dayOfBirth(1)
-                .monthOfBirth(1)
-                .yearOfBirth(1990)
-                .isMale(true)
-                .email("john.doe@example.com")
-                .build();
-        person = personRepository.save(person);
+    void testUpdatePerson() throws Exception {
+        // Mock updated person data
+        Person updatedPerson = new Person();
+        updatedPerson.setName("Updated Name");
+        updatedPerson.setEmail("updatedemail@example.com");
 
-        // When & Then
-        mockMvc.perform(get("/api/persons/" + person.getId())
-                        .accept(MediaType.APPLICATION_JSON))
+        // Simulate the service response
+        when(personService.updatePersonInfo(any(Long.class), any(Person.class))).thenReturn(updatedPerson);
+
+        // Perform the test request and validate the response
+        mockMvc.perform(post("/api/v1/person/update-user-info/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(updatedPerson)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("John"))
-                .andExpect(jsonPath("$.nationalId").value("1234567890"));
+                .andExpect(jsonPath("$.name").value("Updated Name"))
+                .andExpect(jsonPath("$.email").value("updatedemail@example.com"));
     }
 
     @Test
-    void testDeletePerson() throws Exception {
-        // Given
-        Person person = Person.builder()
-                .nationalId("1234567890")
-                .name("John")
-                .family("Doe")
-                .phoneNumber("09123456789")
-                .dayOfBirth(1)
-                .monthOfBirth(1)
-                .yearOfBirth(1990)
-                .isMale(true)
-                .email("john.doe@example.com")
-                .build();
-        person = personRepository.save(person);
+    void testDeleteUser() throws Exception {
+        // Perform the delete request and validate the response
+        mockMvc.perform(post("/api/v1/person/delete-user/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Person deleted ! "));
+    }
 
-        // When & Then
-        mockMvc.perform(delete("/api/persons/" + person.getId())
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+    @Test
+    void testFindPersonById() throws Exception {
+        // Mock person data
+        Person person = new Person();
+        person.setName("Mahdi");
+        person.setFamily("Almasi");
 
-        mockMvc.perform(get("/api/persons/" + person.getId())
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+        // Simulate the service response
+        when(personService.findOneById(1L)).thenReturn(person);
+
+        // Perform the test request and validate the response
+        mockMvc.perform(get("/api/v1/person/findOneById/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Mahdi"))
+                .andExpect(jsonPath("$.family").value("Almasi"));
     }
 }
