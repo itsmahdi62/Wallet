@@ -38,6 +38,7 @@ public class PersonService {
     public Person updatePersonInfo(Long id, Person person) {
         Person updatePerson = personRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Person not found ! "));
+        // only these two option can be changed
         updatePerson.setEmail(person.getEmail());
         updatePerson.setPhoneNumber(person.getPhoneNumber());
         return personRepository.save(updatePerson);
