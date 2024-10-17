@@ -2,6 +2,7 @@ package com.example.wallet.api;
 
 import com.example.wallet.entity.Person;
 import com.example.wallet.security.JwtHelper;
+import com.example.wallet.service.EmailService;
 import com.example.wallet.service.PersonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class PersonAPI {
     private final  PersonService personService;
     private final JwtHelper jwtHelper ;
+
     @GetMapping("/getAllUsers")
     public ResponseEntity<List<Person>> getAllPeople() {
         List<Person> personList = personService.findAllPeople(); // Call to personService to fetch all users
@@ -47,8 +49,8 @@ public class PersonAPI {
         person.setEmail(newperson.getEmail());
         person.setIsMale(newperson.getIsMale());
 
-        int newpersonAge = LocalDate.now().getYear() - newperson.getYearOfBirth() ;
-        if(newperson.getIsMale() && newpersonAge >= 18){
+        int newPersonAge = LocalDate.now().getYear() - newperson.getYearOfBirth() ;
+        if(newperson.getIsMale() && newPersonAge >= 18){
             if(newperson.getMilitaryServiceStatus() == null){
                 throw new IllegalArgumentException("Military service status must be provided for males 18 years or older.");
             }
@@ -64,7 +66,6 @@ public class PersonAPI {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("person", savedPerson); // Add savedPerson object
         responseBody.put("token", token);        // Add the token
-
         return   new ResponseEntity<>(responseBody , headers, HttpStatus.CREATED);
     }
 
