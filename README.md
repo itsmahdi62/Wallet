@@ -1,4 +1,4 @@
-This code has been written for a wallet projct in ISC .
+This program has been written for a wallet projct in ISC .
 
 Each User has one account 
 and each account has multiple transactions .
