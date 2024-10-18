@@ -36,7 +36,7 @@ public class PersonAPI {
     }
     @PostMapping("/signup" )
     @ResponseBody
-    public ResponseEntity<Map> createPerson(@Valid @RequestBody Person newperson) {
+    public ResponseEntity<Map> createPerson(@Valid @RequestBody Person newperson) throws Exception {
        //  if we had person and admin roles in our entity this line of code would let anyone  be an admin
         Person person = new Person();
         person.setNationalId(newperson.getNationalId());

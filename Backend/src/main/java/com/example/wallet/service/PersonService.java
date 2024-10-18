@@ -22,7 +22,7 @@ public class PersonService {
     private final AccountService accountService ;
 
     private final EmailService emailService;
-    public Person savePerson(Person person) {
+    public Person savePerson(Person person)  {
         Person savedPerson = personRepository.save(person);
         // Refactor the code and send this part to Account service
         // This line make a default account for each person
